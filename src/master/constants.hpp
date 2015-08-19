@@ -50,10 +50,11 @@ extern const int MAX_OFFERS_PER_FRAMEWORK;
 
 // Minimum number of cpus per offer.
 extern const double MIN_CPUS;
+extern const int CPU_RESOLUTION;
 
 // Minimum amount of memory per offer.
 extern const Bytes MIN_MEM;
-
+extern const int MEM_RESOLUTION;
 
 // Default interval the master uses to send heartbeats to an HTTP
 // scheduler.

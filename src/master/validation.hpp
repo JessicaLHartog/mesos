@@ -74,6 +74,10 @@ Option<Error> validate(
 // Functions in this namespace are only exposed for testing.
 namespace internal {
 
+//Validates the resolution of a resource call
+bool validateCpuResolution(double cpu);
+bool validateMemResolution(int mem);
+
 // Validates resources of the task and executor (if present).
 Option<Error> validateResources(const TaskInfo& task);
 

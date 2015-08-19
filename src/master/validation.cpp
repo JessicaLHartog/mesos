@@ -425,6 +425,15 @@ Option<Error> validateResourceUsage(
         << "). Please update your executor, as this will be mandatory "
         << "in future releases.";
     }
+    if (!validateCpuResolution(cpus.get())){
+      LOG(WARNING)
+        << "Executor " << stringify(task.executor().executor_id())
+        << " for task " << stringify(task.task_id())
+        << " uses a CPU value at the improper resolution of "
+        << stringify(cpus.get())
+        << ". Please update your executor accounting, as this will be "
+        << "mandatory in future releases.";
+    }
 
     Option<Bytes> mem = executorResources.mem();
     if (mem.isNone() || mem.get() < MIN_MEM) {
@@ -436,6 +445,15 @@ Option<Error> validateResourceUsage(
         << ") than the minimum required (" << MIN_MEM
         << "). Please update your executor, as this will be mandatory "
         << "in future releases.";
+    }
+    if(!validateMemResolution(mem.get().megabytes())){
+      LOG(WARNING)
+        << "Executor " << stringify(task.executor().executor_id())
+        << " for task " << stringify(task.task_id())
+        << " uses a Memory value at the improper resolution of "
+        << stringify(mem.get().megabytes())
+        << ". Please update your executor accounting, as this will be "
+        << "mandatory in future releases.";
     }
   }
 
@@ -455,6 +473,16 @@ Option<Error> validateResourceUsage(
   return None();
 }
 
+bool validateCpuResolution(double cpu){
+  for(int i = 0; i < CPU_RESOLUTION; ++i){
+    cpu *= 10.0;
+  }
+  return cpu == ceil(cpu);
+}
+
+bool validateMemResolution(int mem){
+  return ((mem % MEM_RESOLUTION) == 0);
+}
 
 // Validates that the resources specified by the task are valid.
 Option<Error> validateResources(const TaskInfo& task)
